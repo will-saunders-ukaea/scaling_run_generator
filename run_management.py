@@ -55,8 +55,11 @@ def create_node_dir(config, num_tasks, subs):
     return basedir, launch_dir_cmd
 
 
-def create_jobscript(num_tasks, config, machine, directory, launch_dir_cmd):
+def create_jobscript(num_nodes, config, machine, directory, launch_dir_cmd):
     jobscript = open(config["templates"]["jobscript"]).read()
+
+    jobscript = jobscript.replace("{{NUM_NODES}}", str(num_nodes))
+    num_tasks = num_nodes * machine.num_tasks_per_node
     jobscript = jobscript.replace("{{NUM_TASKS}}", str(num_tasks))
 
     cmds = ""
@@ -82,7 +85,7 @@ def create_run(config, subs):
     for sx in subs.items():
         directory, launch_dir_cmd = create_node_dir(config, sx[0], sx[1])
         create_jobscript(
-            sx[0] * machine.num_tasks_per_node,
+            sx[0],
             config,
             machine,
             directory,
