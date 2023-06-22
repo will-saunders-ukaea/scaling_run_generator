@@ -1,5 +1,6 @@
 import os
 
+
 class BaseFile:
     def __init__(self, filename):
         self.filename = os.path.abspath(filename)
@@ -29,7 +30,7 @@ class Template(BaseFile):
 
     def process(self, subs, directory):
         s = open(self.filename).read()
-        
+
         for sub in subs.items():
             sub_string = "{{{{{KEY}}}}}".format(KEY=sub[0])
             s = s.replace(sub_string, str(sub[1]))
@@ -39,6 +40,3 @@ class Template(BaseFile):
 
     def get_arg(self, directory):
         return os.path.join("./", self.basename)
-
-
-

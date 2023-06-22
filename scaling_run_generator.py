@@ -20,9 +20,3 @@ if __name__ == "__main__":
         print(sx)
 
     create_run(config, subs)
-
-
-
-
-
-

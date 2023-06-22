@@ -4,11 +4,14 @@ import json
 import math
 import importlib
 
+
 class Machine:
     def __init__(self, config):
         self.config = config["machine"]
         self.num_tasks_per_node = int(self.config["tasks_per_node"])
-        self.mpirun = self.config.get("mpirun", "mpirun -n {NUM_TASKS} {EXECUTABLE} {ARGS}")
+        self.mpirun = self.config.get(
+            "mpirun", "mpirun -n {NUM_TASKS} {EXECUTABLE} {ARGS}"
+        )
 
 
 def group_by_node(machine, subs):
@@ -19,7 +22,6 @@ def group_by_node(machine, subs):
             nd[num_nodes] = list()
         nd[num_nodes].append(sub)
     return nd
-
 
 
 def get_args(config, subdir, subs):
@@ -33,8 +35,9 @@ def get_args(config, subdir, subs):
         fx_obj = getattr(filetypes, fx_type)(fx_file)
         fx_obj.process(subs, subdir)
         file_objs.append(fx_obj.get_arg(subdir))
-    
+
     return " ".join(file_objs)
+
 
 def create_node_dir(config, num_tasks, subs):
     basedir = os.path.join(config["directory"], f"nodes_{num_tasks}")
@@ -61,26 +64,30 @@ def create_jobscript(num_tasks, config, machine, directory, launch_dir_cmd):
         cmds += "cd {}\n".format(cmd[1])
         ARGS = cmds[2]
         EXECUTABLE = config["executable"]
-        cmds += machine.mpirun.format(
-            NUM_TASKS=cmd[0],
-            EXECUTABLE=EXECUTABLE,
-            ARGS=cmd[2]
-        ) + " | tee stdout\n"
+        cmds += (
+            machine.mpirun.format(NUM_TASKS=cmd[0], EXECUTABLE=EXECUTABLE, ARGS=cmd[2])
+            + " | tee stdout\n"
+        )
     jobscript = jobscript.replace("{{LAUNCH_CMDS}}", cmds)
 
     with open(os.path.join(directory, "jobscript"), "w") as fh:
         fh.write(jobscript)
 
+
 def create_run(config, subs):
 
     machine = Machine(config)
     subs = group_by_node(machine, subs)
-    
+
     for sx in subs.items():
         directory, launch_dir_cmd = create_node_dir(config, sx[0], sx[1])
-        create_jobscript(sx[0] * machine.num_tasks_per_node, config, machine, directory, launch_dir_cmd)
+        create_jobscript(
+            sx[0] * machine.num_tasks_per_node,
+            config,
+            machine,
+            directory,
+            launch_dir_cmd,
+        )
 
     with open(os.path.join(config["directory"], "config.json"), "w") as fh:
         fh.write(json.dumps(config, indent=2))
-
-

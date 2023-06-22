@@ -29,6 +29,7 @@ class WeakScale(BaseTemplateModifier):
     def update(self, subs):
         subs[self.template_name] = int(subs[self.base_name]) * self.scaling_factor
 
+
 class NumTasks(BaseTemplateModifier):
     def __init__(self, num_tasks, template_name):
         super().__init__(template_name)
@@ -37,6 +38,7 @@ class NumTasks(BaseTemplateModifier):
     def update(self, subs):
         subs[self.template_name] = self.num_tasks
 
+
 class TaskSet(BaseIterationSet):
     def __init__(self, task_set, template_name):
         super().__init__()
@@ -44,6 +46,3 @@ class TaskSet(BaseIterationSet):
         self.task_set = task_set
         for tx in task_set:
             self.mods.append(NumTasks(tx, template_name))
-
-
-

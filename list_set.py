@@ -6,15 +6,15 @@ import importlib
 
 from base_iteration_types import BaseIterationSet
 
+
 class ListSet(BaseIterationSet):
     def __init__(self, list_set):
         super().__init__()
         base_types = importlib.import_module("base_iteration_types")
         for lx in list_set["list_set"]:
             obj_name = lx["type"]
-            self.mods.append(
-                getattr(base_types, obj_name)(**lx["parameters"])
-            )
+            self.mods.append(getattr(base_types, obj_name)(**lx["parameters"]))
+
 
 def create_obj(d):
     if d["type"] == "ListSet":
@@ -28,7 +28,7 @@ def get_subs(config):
 
     iteration_set = config["iteration_set"]
     iteration_objs = [create_obj(dx).get() for dx in iteration_set]
-    
+
     subs_list = []
     for mods in itertools.product(*iteration_objs):
         subs = {}
@@ -37,5 +37,3 @@ def get_subs(config):
         subs_list.append(subs)
 
     return subs_list
-
-
