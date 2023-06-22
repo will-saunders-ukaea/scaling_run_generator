@@ -1,4 +1,5 @@
 import os
+import shutil
 
 
 class BaseFile:
@@ -37,6 +38,21 @@ class Template(BaseFile):
 
         with open(self._output_name(directory), "w") as fh:
             fh.write(s)
+
+    def get_arg(self, directory):
+        return os.path.join("./", self.basename)
+
+
+class Copy(BaseFile):
+    def __init__(self, filename):
+        super().__init__(filename)
+        self.basename = os.path.basename(self.filename)
+
+    def _output_name(self, directory):
+        return os.path.join(directory, self.basename)
+
+    def process(self, subs, directory):
+        shutil.copyfile(self.filename, self._output_name(directory))
 
     def get_arg(self, directory):
         return os.path.join("./", self.basename)
