@@ -1,0 +1,64 @@
+{
+    "name": "ElectrostaticPIC2D3V",
+    "directory": "./run_0",
+    "executable": "/a/b/c",
+    "templates" : {
+        "jobscript": "jobscript",
+        "input_args": [
+            ["Template", "config.xml"],
+            ["Static", "mesh.xml"]
+        ]
+    },
+    "machine" : {
+        "tasks_per_node": 4
+    },
+    "iteration_set" : [
+        {
+            "type": "TaskSet",
+            "parameters": {
+                "task_set": [1,2,4,8],
+                "template_name": "NUM_TASKS"
+            }
+        },
+        {
+            "type": "ListSet",
+            "parameters": {
+                "list_set": [
+                    {
+                        "type": "WeakScale",
+                        "parameters": {
+                            "base_name": "NUM_TASKS",
+                            "template_name": "NUM_PARTICLES",
+                            "scaling_factor": 100
+                        }
+                    },
+                    {
+                        "type": "WeakScale",
+                        "parameters": {
+                            "base_name": "NUM_TASKS",
+                            "template_name": "NUM_PARTICLES",
+                            "scaling_factor": 200
+                        }
+                    },
+                    {
+                        "type": "WeakScale",
+                        "parameters": {
+                            "base_name": "NUM_TASKS",
+                            "template_name": "NUM_PARTICLES",
+                            "scaling_factor": 400
+                        }
+                    },
+                    {
+                        "type": "WeakScale",
+                        "parameters": {
+                            "base_name": "NUM_TASKS",
+                            "template_name": "NUM_PARTICLES",
+                            "scaling_factor": 800
+                        }
+                    }
+                    
+                ]
+            }
+        }
+    ]
+}
