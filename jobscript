@@ -1,6 +1,7 @@
 
 num nodes = {{NUM_NODES}}
 num tasks = {{NUM_TASKS}}
+num tasks per node = {{NUM_TASKS_PER_NODE}}
 
 
 {{LAUNCH_CMDS}}

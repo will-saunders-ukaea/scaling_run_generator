@@ -61,6 +61,8 @@ def create_jobscript(num_nodes, config, machine, directory, launch_dir_cmd):
     jobscript = jobscript.replace("{{NUM_NODES}}", str(num_nodes))
     num_tasks = num_nodes * machine.num_tasks_per_node
     jobscript = jobscript.replace("{{NUM_TASKS}}", str(num_tasks))
+    jobscript = jobscript.replace("{{NUM_TASKS_PER_NODE}}",
+        str(machine.num_tasks_per_node))
 
     cmds = ""
     for cmd in launch_dir_cmd:

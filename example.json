@@ -6,7 +6,7 @@
         "jobscript": "jobscript",
         "input_args": [
             ["Template", "config.xml"],
-            ["Static", "mesh.xml"],
+            ["Static", "mesh.xml"]
         ]
     },
     "machine" : {
